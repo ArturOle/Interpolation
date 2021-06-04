@@ -14,8 +14,8 @@ double non_general_newton_symbol( double n, int k ) {
 
 	for( int i = 0; i < k; i++ ) {
 		o = o * (n + i);
-		std::clog << "ngs: n=" << n << ", k=" << k
-			<< ", i=" << i << ", o=" << o << "\n";
+		//std::clog << "ngs: n=" << n << ", k=" << k
+		//	<< ", i=" << i << ", o=" << o << "\n";
 	}
 
 	return( o / factorial( k ));
@@ -23,7 +23,7 @@ double non_general_newton_symbol( double n, int k ) {
 
 double value_in_x(
 	std::vector<std::vector<double>> &op,
-	double x, double h
+	double x, double x0, double h
 );
 
 std::vector<std::vector<double>> operators(
@@ -38,7 +38,8 @@ std::vector<double> generate_polynomial(
 );
 
 std::vector<double> interpolation(
-	std::vector<std::pair<double, double>> xy
+	std::vector<std::pair<double, double>> xy,
+	double x = 2.75
 ) {
     int n = xy.size();
     double h = std::abs(xy[0].first - xy[1].first);
@@ -46,8 +47,9 @@ std::vector<double> interpolation(
     //std::vector<double> polynomial = generate_polynomial(xy, op, n, h);
     //std::cout << "The degree of the polynomial: " << n << std::endl;
     //return polynomial;
-    double x = 3;
-    std::clog << "Value in x = " << x << ":\n" << value_in_x( op, x, h )
+    //double x = 2.75;
+    double x0 = xy[0].first;
+    std::clog << "Value in x = " << x << ":\n" << value_in_x( op, x, x0, h )
     		<< "\n";
     return std::vector<double>();
 }
@@ -96,16 +98,16 @@ std::vector<std::vector<double>> operators(
 
 double value_in_x(
 	std::vector<std::vector<double>> &op,
-	double x, double h
+	double x, double x0, double h
 ) {
 	double sum = 0.0;
 	
-	double t = (x - op[0][0]) / h;
-	std::clog << "intp: t=" << t << "\n";
+	double t = (x - x0) / h;
+	// std::clog << "intp: t=" << t << "\n";
 
 	for( int i = 0; i < op.size(); i++ ) {
 		sum += non_general_newton_symbol(-t, i) * op[i][0] * ( i%2 ? -1 : 1 );
-		std::clog << "intp: i=" << i << ", op=" << op[i][0] << ", sum=" << sum << "\n";
+		// std::clog << "intp: i=" << i << ", op=" << op[i][0] << ", sum=" << sum << "\n";
 	}
 
 	return sum;
