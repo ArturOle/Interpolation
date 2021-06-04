@@ -7,7 +7,8 @@ using namespace std;
 int main()
 {
 
-    std::vector<std::pair<double, double>> x = {{9, -2}, {7, 1}, {5, -1}, {3, 4}, {1, 2}};
+    //std::vector<std::pair<double, double>> x = {{9, -2}, {7, 1}, {5, -1}, {3, 4}, {1, 2}};
+    std::vector<std::pair<double, double>> x = {{3, 0}, {2.5, 2}, {2, 4}, {1.5, 3}, {1, 1}};
     interpolation(x);
 
 
