@@ -2,6 +2,29 @@
 #include <utility>
 #include <iostream>
 
+unsigned int factorial( unsigned int n ) {
+	if( n == 0 )
+		return 1;
+	return( n * factorial( n-1 ));
+}
+
+double non_general_newton_symbol( double n, int k ) {
+
+	double o = 1;
+
+	for( int i = 0; i < k; i++ ) {
+		o = o * (n + i);
+		std::clog << "ngs: n=" << n << ", k=" << k
+			<< ", i=" << i << ", o=" << o << "\n";
+	}
+
+	return( o / factorial( k ));
+}
+
+double value_in_x(
+	std::vector<std::vector<double>> &op,
+	double x, double h
+);
 
 std::vector<std::vector<double>> operators(
 	std::vector<std::pair<double, double>> &xy,
@@ -20,9 +43,13 @@ std::vector<double> interpolation(
     int n = xy.size();
     double h = std::abs(xy[0].first - xy[1].first);
     std::vector<std::vector<double>> op = operators(xy, n); // variable can't have the same name as method
-    std::vector<double> polynomial = generate_polynomial(xy, op, n, h);
-    std::cout << "The degree of the polynomial: " << n << std::endl;
-    return polynomial;
+    //std::vector<double> polynomial = generate_polynomial(xy, op, n, h);
+    //std::cout << "The degree of the polynomial: " << n << std::endl;
+    //return polynomial;
+    double x = 3;
+    std::clog << "Value in x = " << x << ":\n" << value_in_x( op, x, h )
+    		<< "\n";
+    return std::vector<double>();
 }
 
 
@@ -66,6 +93,23 @@ std::vector<std::vector<double>> operators(
     // return operators;
 }
 
+
+double value_in_x(
+	std::vector<std::vector<double>> &op,
+	double x, double h
+) {
+	double sum = 0.0;
+	
+	double t = (x - op[0][0]) / h;
+	std::clog << "intp: t=" << t << "\n";
+
+	for( int i = 0; i < op.size(); i++ ) {
+		sum += non_general_newton_symbol(-t, i) * op[i][0] * ( i%2 ? -1 : 1 );
+		std::clog << "intp: i=" << i << ", op=" << op[i][0] << ", sum=" << sum << "\n";
+	}
+
+	return sum;
+}
 
 std::vector<double> generate_polynomial(
 	std::vector<std::pair<double, double>> &xy,
