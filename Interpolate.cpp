@@ -23,11 +23,28 @@ public:
 		this->x0 = xy[0].first;
 		this->degree = xy.size();
     	this->h = std::abs(xy[0].first - xy[1].first);
-		this->ops = this->operators();
+		this->ops = this->operators(this->degree);
+	}
+
+	Interpolation(std::vector<std::pair<double, double>> xy_in, double n)
+	{
+		this->xy = xy_in;
+		this->x0 = xy[0].first;
+		this->degree = n;
+
+		if( n > xy.size())
+		{
+			std::clog << "Error: n cannot be higher than number of points in the container" << std::endl;
+			std::abort();
+		}
+
+    	this->h = std::abs(xy[0].first - xy[1].first);
+		this->ops = this->operators(this->degree);
 	}
 
 
-	std::vector<std::vector<double>> operators()
+
+	std::vector<std::vector<double>> operators(double n)
 	{
 		std::vector<std::vector<double>> op (this->degree, std::vector<double>( this->degree, 0 ));
 
