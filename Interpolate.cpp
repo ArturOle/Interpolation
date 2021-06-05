@@ -110,7 +110,7 @@ double value_in_x(
 
 	for( int i = 0; i < op.size(); i++ ) 
     {
-		sum += non_general_newton_symbol(t, i) * op[i][0] ;//* ( i%2 ? -1 : 1 );
+		sum += non_general_newton_symbol(t, i) * op[i][0];
 		// std::clog << "intp: i=" << i << ", op=" << op[i][0] << ", sum=" << sum << "\n";
 	}
 
