@@ -2,6 +2,22 @@
 #include <utility>
 #include <iostream>
 
+double value_in_x(
+	std::vector<std::vector<double>> &op,
+	double x, double x0, double h
+);
+
+std::vector<std::vector<double>> operators(
+	std::vector<std::pair<double, double>> &xy,
+	int n
+);
+
+std::vector<double> generate_polynomial(
+	std::vector<std::pair<double, double>> &xy,
+	std::vector<std::vector<double>> &operators,
+	int n, double h
+);
+
 unsigned int factorial( unsigned int n ) {
 	if( n == 0 )
 		return 1;
@@ -21,26 +37,8 @@ double non_general_newton_symbol( double n, int k ) {
 	return( o / factorial( k ));
 }
 
-double value_in_x(
-	std::vector<std::vector<double>> &op,
-	double x, double x0, double h
-);
-
-std::vector<std::vector<double>> operators(
-	std::vector<std::pair<double, double>> &xy,
-	int n
-);
-
-std::vector<double> generate_polynomial(
-	std::vector<std::pair<double, double>> &xy,
-	std::vector<std::vector<double>> &operators,
-	int n, double h
-);
-
-std::vector<double> interpolation(
-	std::vector<std::pair<double, double>> xy,
-	double x = 2.75
-) {
+std::vector<double> interpolation(std::vector<std::pair<double, double>> xy, double x = 2.75)
+ {
     int n = xy.size();
     double h = std::abs(xy[0].first - xy[1].first);
     std::vector<std::vector<double>> op = operators(xy, n); // variable can't have the same name as method
@@ -54,27 +52,32 @@ std::vector<double> interpolation(
     return std::vector<double>();
 }
 
+std::vector<std::vector<double>> operators(std::vector<std::pair<double, double>> &xy, int n) 
+{
+	std::vector<std::vector<double>> op (
+        xy.size(), 
+        std::vector<double>( xy.size(), 0 )
+    );
 
-std::vector<std::vector<double>> operators(
-	std::vector<std::pair<double, double>> &xy,
-	int n
-) {
-	std::vector<std::vector<double>>
-		op(xy.size(), std::vector<double>( xy.size(), 0 ));
-
-	for( int i = 0; i < xy.size(); i++ ) {
+	for( int i = 0; i < xy.size(); i++ ) 
+    {
 		op[0][i] = xy[i].second;
 	}
 
-	for( int i = 1; i < xy.size(); i++ ) {
-		for( int j = 0; j < xy.size() - i; j++ ) {
+	for( int i = 1; i < xy.size(); i++ ) 
+    {
+		for( int j = 0; j < xy.size() - i; j++ ) 
+        {
 			op[i][j] = op[i-1][j] - op[i-1][j+1];
 		}
 	}
 
 	std::clog << "Difference operators:" << std::endl;
-	for( int i = 0; i < xy.size(); i++ ) {
-		for( int j = 0; j < xy.size() - i; j++ ) {
+	
+    for( int i = 0; i < xy.size(); i++ ) 
+    {
+		for( int j = 0; j < xy.size() - i; j++ ) 
+        {
 			std::clog << op[j][i] << "\t"; 
 		}
 		std::clog << std::endl;
@@ -95,18 +98,19 @@ std::vector<std::vector<double>> operators(
     // return operators;
 }
 
-
 double value_in_x(
 	std::vector<std::vector<double>> &op,
 	double x, double x0, double h
-) {
+    ) 
+{
 	double sum = 0.0;
 	
 	double t = (x - x0) / h;
 	// std::clog << "intp: t=" << t << "\n";
 
-	for( int i = 0; i < op.size(); i++ ) {
-		sum += non_general_newton_symbol(-t, i) * op[i][0] * ( i%2 ? -1 : 1 );
+	for( int i = 0; i < op.size(); i++ ) 
+    {
+		sum += non_general_newton_symbol(t, i) * op[i][0] ;//* ( i%2 ? -1 : 1 );
 		// std::clog << "intp: i=" << i << ", op=" << op[i][0] << ", sum=" << sum << "\n";
 	}
 
@@ -117,7 +121,8 @@ std::vector<double> generate_polynomial(
 	std::vector<std::pair<double, double>> &xy,
 	std::vector<std::vector<double>> &operators,
 	int n, double h
-) {
+    )
+ {
     /// The function responsible for generating the Newton polynomial  
     ///
     std::vector<double> polynomial;

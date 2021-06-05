@@ -11,14 +11,18 @@ int main( int argc, char** argv )
 	if( argc > 1 )
 		x = atof( argv[1] );
 	else
-		x = 2.75;
+		x = 2;
 	
 	//std::vector<std::pair<double, double>> x = {{9, -2}, {7, 1}, {5, -1}, {3, 4}, {1, 2}};
 	std::vector<std::pair<double, double>> xy = {{3, 0}, {2.5, 2}, {2, 4}, {1.5, 3}, {1, 1}};
-	interpolation(xy, x);
+	//interpolation(xy, x);
 
-
-
+    float i = xy[0].first;
+    while(i >= xy[xy.size()-1].first) 
+    {
+        interpolation(xy, i);
+        i -= 0.25;
+    }
 	// int i, j, n;
 
 	// /* Input Section */
